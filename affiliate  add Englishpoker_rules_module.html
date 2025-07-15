@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixed Game Rules By The Poker Yoda</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 50%, #2a7559 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+
+        .promo-section {
+            background: linear-gradient(45deg, #ff6b35, #ff8e35);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .promo-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .promo-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .benefit h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+        }
+
+        .bonus-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ffd700;
+            border: 2px dashed #ffd700;
+        }
+
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .game-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .game-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .game-button.active {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .game-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .game-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-align: center;
+        }
+
+        .rule-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .rule-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .rule-section p, .rule-section li {
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .rule-section ul {
+            padding-left: 20px;
+        }
+
+        .highlight {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .card-example {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .promo-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .game-button {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mixed Game Rules</h1>
+            <p>By The Poker Yoda</p>
+            <p>Master the art of mixed games with comprehensive rules and strategies</p>
+        </div>
+
+        <div class="promo-section">
+            <h2>🚀 Play Real Money Poker Now!</h2>
+            <div class="promo-benefits">
+                <div class="benefit">
+                    <h3>200% Sign-Up Bonus</h3>
+                    <p>Triple your first deposit instantly!</p>
+                </div>
+                <div class="benefit">
+                    <h3>Up to 35% Rakeback</h3>
+                    <p>Get money back on every hand played</p>
+                </div>
+                <div class="benefit">
+                    <h3>100 Phenom Tokens</h3>
+                    <p>After $100 rake paid - exclusive rewards!</p>
+                </div>
+                <div class="benefit">
+                    <h3>Site Ownership</h3>
+                    <p>Voting rights & profit sharing!</p>
+                </div>
+            </div>
+            
+            <a href="https://play.phenompoker.com/register?r=PokerYoda" class="cta-button" target="_blank">
+                🎯 JOIN PHENOM POKER NOW
+            </a>
+            
+            <div class="bonus-code">
+                Use Bonus Code: <strong>"PokerYoda"</strong>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 1.1rem;">
+                <strong>💰 Deposit with Crypto</strong> - Fast, secure, and anonymous!
+            </p>
+            
+            <div class="disclaimer">
+                Must be 18+ to play. I am an affiliate of Phenom Poker and may receive compensation for referrals. Please gamble responsibly.
+            </div>
+        </div>
+
+        <div class="game-selector">
+            <button class="game-button active" onclick="showGame('nlhe')">No Limit Hold'em</button>
+            <button class="game-button" onclick="showGame('lhe')">Limit Hold'em</button>
+            <button class="game-button" onclick="showGame('razz')">Razz</button>
+            <button class="game-button" onclick="showGame('draw27')">2-7 Single Draw</button>
+            <button class="game-button" onclick="showGame('triple27')">2-7 Triple Draw</button>
+            <button class="game-button" onclick="showGame('omaha8')">Omaha Hi-Lo</button>
+            <button class="game-button" onclick="showGame('omaha')">Omaha Hi</button>
+            <button class="game-button" onclick="showGame('stud8')">Stud Hi-Lo</button>
+            <button class="game-button" onclick="showGame('stud')">Seven Card Stud</button>
+            <button class="game-button" onclick="showGame('badugi')">Badugi</button>
+        </div>
+
+        <div id="nlhe" class="game-content active">
+            <h3>No Limit Texas Hold'em</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>The most popular poker variant where players can bet any amount up to their entire stack at any time.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">2 hole cards</span> dealt face down</li>
+                    <li>5 community cards are dealt face up in the center</li>
+                    <li>Players make the best 5-card hand using any combination of their 2 cards and the 5 community cards</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Rounds</h4>
+                <ul>
+                    <li><strong>Pre-flop:</strong> After receiving hole cards</li>
+                    <li><strong>Flop:</strong> After first 3 community cards</li>
+                    <li><strong>Turn:</strong> After 4th community card</li>
+                    <li><strong>River:</strong> After 5th community card</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Structure</h4>
+                <ul>
+                    <li>Players can bet <span class="highlight">any amount</span> up to their entire stack</li>
+                    <li>Minimum bet is the size of the big blind</li>
+                    <li>Minimum raise must be at least the size of the previous bet/raise</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Hand Rankings (High to Low)</h4>
+                <div class="card-example">
+                    Royal Flush → Straight Flush → Four of a Kind → Full House → 
+                    Flush → Straight → Three of a Kind → Two Pair → One Pair → High Card
+                </div>
+            </div>
+        </div>
+
+        <div id="lhe" class="game-content">
+            <h3>Limit Texas Hold'em</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>Similar to No Limit Hold'em but with fixed betting limits that restrict the amount you can bet or raise.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Structure</h4>
+                <ul>
+                    <li><span class="highlight">Small bet</span> used pre-flop and on the flop</li>
+                    <li><span class="highlight">Big bet</span> (2x small bet) used on turn and river</li>
+                    <li>Maximum of <span class="highlight">4 bets</span> per player per round (bet, raise, re-raise, cap)</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Example: $2/$4 Limit</h4>
+                <ul>
+                    <li>Pre-flop & Flop: $2 bets and raises</li>
+                    <li>Turn & River: $4 bets and raises</li>
+                    <li>Small blind: $1, Big blind: $2</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Strategic Differences</h4>
+                <ul>
+                    <li>More mathematical and less psychological than No Limit</li>
+                    <li>Can't bluff opponents out of pots as easily</li>
+                    <li>Pot odds calculations are more straightforward</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="razz" class="game-content">
+            <h3>Razz (Seven Card Stud Low)</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A lowball variant of Seven Card Stud where the <span class="highlight">lowest hand wins</span>. Aces are always low.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives 7 cards total</li>
+                    <li>First 2 cards dealt face down, 3rd card face up</li>
+                    <li>Cards 4, 5, 6 dealt face up</li>
+                    <li>7th card dealt face down</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Rounds</h4>
+                <ul>
+                    <li><strong>3rd Street:</strong> Player with highest door card brings in</li>
+                    <li><strong>4th-6th Streets:</strong> Player with best low hand showing acts first</li>
+                    <li><strong>7th Street:</strong> Player with best low hand showing acts first</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Hand Rankings (Best to Worst)</h4>
+                <div class="card-example">
+                    A-2-3-4-5 (wheel) → A-2-3-4-6 → A-2-3-5-6 → A-2-4-5-6 → etc.
+                </div>
+                <ul>
+                    <li>Straights and flushes <span class="highlight">don't count</span> against you</li>
+                    <li>Aces are always low</li>
+                    <li>No qualifying hand needed - worst hand wins if everyone else folds</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="draw27" class="game-content">
+            <h3>2-7 Single Draw</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A lowball draw game where players try to make the <span class="highlight">worst possible poker hand</span>. The best hand is 2-3-4-5-7 (not suited).</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing & Play</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">5 cards</span> face down</li>
+                    <li>First betting round</li>
+                    <li>Players can discard and draw new cards (0-5 cards)</li>
+                    <li>Second and final betting round</li>
+                    <li>Showdown</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Hand Rankings (Best to Worst)</h4>
+                <div class="card-example">
+                    7-5-4-3-2 → 7-6-4-3-2 → 7-6-5-3-2 → 7-6-5-4-2 → 8-5-4-3-2 → etc.
+                </div>
+                <ul>
+                    <li>Aces are <span class="highlight">always high</span></li>
+                    <li>Straights and flushes <span class="highlight">count against you</span></li>
+                    <li>Best possible hand: 7-5-4-3-2 (not suited)</li>
+                    <li>Worst hand: A-A-A-A-A</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Strategy Notes</h4>
+                <ul>
+                    <li>Standing pat (not drawing) can be a powerful bluff</li>
+                    <li>Drawing one card suggests a strong made hand</li>
+                    <li>Position is crucial due to betting structure</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="triple27" class="game-content">
+            <h3>2-7 Triple Draw</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>Similar to 2-7 Single Draw but with <span class="highlight">three drawing rounds</span>, making it more complex and strategic.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing & Play</h4>
+                <ul>
+                    <li>Each player receives 5 cards</li>
+                    <li>Betting round #1</li>
+                    <li>First draw (discard 0-5 cards)</li>
+                    <li>Betting round #2</li>
+                    <li>Second draw</li>
+                    <li>Betting round #3</li>
+                    <li>Third draw</li>
+                    <li>Final betting round</li>
+                    <li>Showdown</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Hand Rankings</h4>
+                <p>Same as 2-7 Single Draw:</p>
+                <div class="card-example">
+                    7-5-4-3-2 (best) → A-A-A-A-A (worst)
+                </div>
+            </div>
+
+            <div class="rule-section">
+                <h4>Strategy Considerations</h4>
+                <ul>
+                    <li>More drawing rounds = more chances to improve</li>
+                    <li>Can play more speculative hands</li>
+                    <li>Positional awareness is crucial</li>
+                    <li>Betting patterns reveal hand strength</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="omaha8" class="game-content">
+            <h3>Omaha Hi-Lo (Omaha 8 or Better)</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A split pot game where the highest and lowest hands share the pot. Players receive 4 hole cards and must use exactly 2 of them.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">4 hole cards</span></li>
+                    <li>5 community cards dealt (flop, turn, river)</li>
+                    <li>Must use <span class="highlight">exactly 2 hole cards</span> and exactly 3 community cards</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Low Hand Qualification</h4>
+                <ul>
+                    <li>Low hand must be <span class="highlight">8 or better</span> (A-2-3-4-5 through 8-7-6-5-4)</li>
+                    <li>Aces are low for low hands</li>
+                    <li>Straights and flushes don't count against low hands</li>
+                    <li>Best low: A-2-3-4-5 (wheel)</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Pot Distribution</h4>
+                <ul>
+                    <li>If qualifying low exists: High hand wins half, low hand wins half</li>
+                    <li>If no qualifying low: High hand wins entire pot</li>
+                    <li>Same player can win both high and low (scoop)</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Example</h4>
+                <div class="card-example">
+                    Your cards: A♥ 2♠ K♣ Q♦<br>
+                    Board: 3♥ 4♠ 5♣ 9♦ J♥<br>
+                    High hand: A-K-Q-J-9 (using A♥ K♣)<br>
+                    Low hand: 5-4-3-2-A (using A♥ 2♠)
+                </div>
+            </div>
+        </div>
+
+        <div id="omaha" class="game-content">
+            <h3>Omaha Hi (Pot Limit Omaha)</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>Similar to Texas Hold'em but players receive 4 hole cards and must use exactly 2 of them. Usually played with pot limit betting.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">4 hole cards</span></li>
+                    <li>5 community cards dealt (flop, turn, river)</li>
+                    <li>Must use <span class="highlight">exactly 2 hole cards</span> and exactly 3 community cards</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Pot Limit Betting</h4>
+                <ul>
+                    <li>Can bet up to the <span class="highlight">size of the pot</span></li>
+                    <li>Pot size = current pot + all bets in current round + your call</li>
+                    <li>More action than limit, less swingy than no limit</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Example Pot Calculation</h4>
+                <div class="card-example">
+                    Pot: $100, Opponent bets $50<br>
+                    Your maximum raise: $100 + $50 + $50 = $200<br>
+                    (pot + their bet + your call)
+                </div>
+            </div>
+
+            <div class="rule-section">
+                <h4>Strategy Notes</h4>
+                <ul>
+                    <li>Much more action than Hold'em due to 4 cards</li>
+                    <li>Draws are more common and powerful</li>
+                    <li>Position is extremely important</li>
+                    <li>Nuts and near-nuts play much bigger role</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="stud8" class="game-content">
+            <h3>Seven Card Stud Hi-Lo (Stud 8 or Better)</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A split pot variant of Seven Card Stud where high and low hands share the pot. Low hand must qualify with 8 or better.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives 7 cards total</li>
+                    <li>First 2 cards face down, 3rd card face up</li>
+                    <li>Cards 4, 5, 6 dealt face up</li>
+                    <li>7th card dealt face down</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Rounds</h4>
+                <ul>
+                    <li><strong>3rd Street:</strong> Lowest door card brings in</li>
+                    <li><strong>4th-6th Streets:</strong> Highest showing hand acts first</li>
+                    <li><strong>7th Street:</strong> Highest showing hand acts first</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Low Hand Qualification</h4>
+                <ul>
+                    <li>Must have 5 cards <span class="highlight">8 or lower</span></li>
+                    <li>Aces are low for low hands</li>
+                    <li>Straights and flushes don't hurt low hands</li>
+                    <li>Best low: A-2-3-4-5</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Pot Distribution</h4>
+                <ul>
+                    <li>If qualifying low exists: pot is split</li>
+                    <li>If no qualifying low: high hand wins all</li>
+                    <li>Same player can scoop both halves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="stud" class="game-content">
+            <h3>Seven Card Stud</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A classic poker game where players receive 7 cards each and make the best 5-card high hand. No community cards.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">7 cards total</span></li>
+                    <li>First 2 cards dealt face down (hole cards)</li>
+                    <li>3rd card dealt face up (door card)</li>
+                    <li>4th, 5th, 6th cards dealt face up</li>
+                    <li>7th card dealt face down</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Betting Rounds</h4>
+                <ul>
+                    <li><strong>3rd Street:</strong> Player with lowest door card brings in</li>
+                    <li><strong>4th Street:</strong> Player with highest showing hand acts first</li>
+                    <li><strong>5th Street:</strong> Player with highest showing hand acts first</li>
+                    <li><strong>6th Street:</strong> Player with highest showing hand acts first</li>
+                    <li><strong>7th Street:</strong> Player with highest showing hand acts first</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Bring-in Rules</h4>
+                <ul>
+                    <li>Player with <span class="highlight">lowest door card</span> must bring in</li>
+                    <li>Suits break ties: clubs (lowest), diamonds, hearts, spades (highest)</li>
+                    <li>Bring-in is typically 1/3 of small bet</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h4>Strategy Elements</h4>
+                <ul>
+                    <li>Memory of folded cards is crucial</li>
+                    <li>Reading opponents' boards</li>
+                    <li>Starting hand selection based on door cards</li>
+                    <li>Calculating live cards for draws</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="badugi" class="game-content">
+            <h3>Badugi</h3>
+            
+            <div class="rule-section">
+                <h4>Game Overview</h4>
+                <p>A unique lowball draw game where the goal is to make the <span class="highlight">lowest 4-card hand</span> with all different suits and ranks.</p>
+            </div>
+
+            <div class="rule-section">
+                <h4>Dealing & Play</h4>
+                <ul>
+                    <li>Each player receives <span class="highlight">4 cards</span> face down</li>
+                    <li>First betting round</li>
+                    <li>First draw (discard 0-4 cards)</li
